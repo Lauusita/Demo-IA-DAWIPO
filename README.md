@@ -22,7 +22,4 @@ To run the application, execute the `main.py` file using streamlit.
 ```
 python -m streamlit run <filename.py>
 ```
-if you are running the application from a different path, execute the path where is located the `main.py`
-``` 
-streamlit run /your/path/main.py 
-```
+
