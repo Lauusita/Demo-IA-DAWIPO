@@ -3,14 +3,14 @@ import streamlit as st
 from langchain.chat_models import ChatOpenAI
 # from langchain.schema import SystemMessage, HumanMessage, AIMessage
 from langchain.llms import OpenAI
-from langchain.agents.agent_types import AgentType
-from langchain_experimental.agents.agent_toolkits.csv.base import create_csv_agent
+#from langchain.agents.agent_types import AgentType
+#from langchain_experimental.agents.agent_toolkits.csv.base import create_csv_agent
 from langchain.vectorstores.pinecone import Pinecone
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+#from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 import pinecone
-import openai
+
 
 def main():
 
@@ -28,23 +28,6 @@ def main():
         selected = st.selectbox("Elige la manera en que quieres que responda: ",options=opciones)
 
         user_question = st.text_input("Ask a question about logistics: ")
-        
-        llm = ChatOpenAI(
-                temperature=0,
-                model="gpt-3.5-turbo",
-                )
-        
-        # agent = create_csv_agent(
-        #         llm, 
-        #         p,
-        #         verbose=True,
-        #         agent_type=AgentType.OPENAI_FUNCTIONS
-        #         )
-        # agent.handle_parsing_errors= True       
-        # stringAgent = str(agent.tools[0].locals)
-        # firsPart = RecursiveCharacterTextSplitter(chunk_size= 1536, chunk_overlap=200)
-        # document1 = firsPart.split_text(stringAgent)
-        # print(len(document1))
         
 
         print(pinecone.list_indexes())
