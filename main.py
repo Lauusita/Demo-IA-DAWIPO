@@ -30,12 +30,10 @@ def main():
         user_question = st.text_input("Ask a question about logistics: ")
         
 
-        print(pinecone.list_indexes())
         embeddigens = OpenAIEmbeddings(openai_api_key=OpenAI.api_key )
         searchVector = Pinecone.from_existing_index("wipoia", embeddigens)
         print('se ha conectado')
 
-        print(selected)
 
         def search(vector, prompt):
                 llm = ChatOpenAI(model='gpt-4', temperature=0)
@@ -63,4 +61,3 @@ if __name__ == "__main__":
 
 
 
-# streamlit run C:\Users\laura\OneDrive\Documents\COOWEB\WIPO-IA\main.py
