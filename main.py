@@ -15,7 +15,7 @@ import pinecone
 def main():
 
         OpenAI.api_key = os.getenv('OPENAI_API_KEY')
-        pinecone.init(api_key=os.getenv('PINECONE_API_KEY'), environment= os.getenv('PINECONE_ENV'))
+        pinecone.init(api_key="5c4ae0f5-57b8-456a-9269-73eb310c4512"), environment= os.getenv('PINECONE_ENV'))
 
         st.set_page_config(page_title="Ask your CSV 📄")
         st.header("Ask your CSV 📄")
