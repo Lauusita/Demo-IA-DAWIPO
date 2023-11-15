@@ -9,16 +9,17 @@ This python application reads CSVs documents using an agentExecutor and processe
 1. First of all, make sure you have Python and pip previously installed on your system before run the next steps. Additionally, it's neccesary to obtain an OPENAI API Key, Pinecone API key and its respective enviroment. Put those API keys on a `.env` file. Ensure that you won't make them public
 2. To install de required packages use the following command: 
 ``` 
-pip install langchain langchain-experimental pinecone streamlit python-dotenv
+pip install openai langchain langchain-experimental streamlit python-dotenv tiktoken
+```
+
+```
+pip3 install pinecone-client
 ```
 
 
 ## Usage
 To run the application, execute the `main.py` file using streamlit.
 ```
-streamlit run main.py
+python -m streamlit run <filename.py>
 ```
-if you are running the application from a different path, execute the path where is located the `main.py`
-``` 
-streamlit run /your/path/main.py 
-```
+
