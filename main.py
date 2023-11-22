@@ -76,17 +76,17 @@ def main():
                         elif extension[1] in [".xlsx", ".xls"]:
 
                                 
-                                excel_data_fragment = pd.read_excel(file, sheet_name="Hoja1")
+                                excel_data_fragment = pd.read_excel(file)
                                 
-                                json_string = excel_data_fragment.to_json()
+                                json_string = excel_data_fragment.to_json(orient="index")
+                                
                                 parsed_json= json.loads(json_string)
-                                parsed_json
-
+                                
                                 a = str(parsed_json)
-                                print(parsed_json)
-                                xlsxDoc = RecursiveCharacterTextSplitter(chunk_size= 1536)
+                                print(a)
+                                xlsxDoc = RecursiveCharacterTextSplitter(chunk_size= 414, chunk_overlap= 1)
                                 xlsx = xlsxDoc.split_text(a)
-                                Pinecone.from_texts(xlsx, embeddigns, index_name="wipoia")
+                                #Pinecone.from_texts(xlsx, embeddigns, index_name="wipoia")
         
         
         searchVector = Pinecone.from_existing_index("wipoia", embeddigns)
@@ -98,11 +98,12 @@ def main():
 
         def search(vector, prompt):
                 
+
                 llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0)
-                retriever = searchVector.as_retriever(search_type="similarity")
+                retriever = vector.as_retriever(search_type="similarity")
                 
                 cadena = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever= retriever)
-                a = ConversationBufferWindowMemory()
+                
                 run = cadena.run(prompt)
                 return run
         
