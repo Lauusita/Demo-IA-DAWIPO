@@ -1,3 +1,0 @@
-datos = {'Pedido': 4700088934, 'Incoterm': 'FCA', 'Ciudad Incoterm': 'Altamira', 'Via': 'MARITIMA', 'Paisorigen (BL)': 'US', 'AduanaSalida (Fact)': 'Altamira', 'AduanaLlegada (Fact)': 'Cartagena', 'Estado': 'Ingresado en el almacén', 'Booking_Reserva': None, 'Impo': 129968, 'Cod Prov': 4000095, 'Desc Proveedor': 'VISKASE COMPANIES INC.', 'Orden venta': None, 'Pos': 310, 'Cod Mat': 7000656, 'Desc Material': 'TRIPA'}
-
-print(len(datos))

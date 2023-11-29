@@ -1,8 +1,0 @@
-"Orden de Compra (OC)","Estado Actual","Último Cambio Registrado","Fecha del Cambio","Acciones Pendientes","Observaciones"
-"OC12345","Booking Request","Confirmación de espacio","5/10/2023","Enviar documentos BL","Esperando aprobación del cliente"
-"OC12346","Picked Up","Recolección del cargamento","4/10/2023","Confirmar fecha de salida","Sin incidencias"
-"OC12347","Departed","Salida del puerto","15/9/2023","Estimar fecha de llegada","Retraso debido a condiciones climáticas"
-"OC12348","Arrived","Llegada a destino","20/10/2023","Inspección aduanal","Prioridad alta para inspección"
-"OC12349","Customs","Inicio de trámites aduanales","6/10/2023","Despacho de aduana","Requiere revisión de documentación"
-"OC12350","Cleared","Aprobación aduanal","24/9/2023","Entrega final al cliente","Cliente notificado de la liberación"
-"OC12351","Completed","Entrega completa","7/10/2023","Cierre de OC","OC cerrada sin discrepancias"
