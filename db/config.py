@@ -1,12 +1,11 @@
 import pymongo
-
+import os
 MONGO_TIMEOUT= 1000
-MONGO_URI= "mongodb+srv://laura_manolo:P0nedera@registromanolo.9xu303a.mongodb.net/"
 MONGODB = "test_database"
-MONGOCOL = "Registro_embarque"
+MONGOCOL = "registro_embarque"
 
 try:
-    cliente = pymongo.MongoClient(MONGO_URI, serverSelectionTimeOutMS= MONGO_TIMEOUT)
+    cliente = pymongo.MongoClient(os.getenv('URLMONGO'), serverSelectionTimeOutMS= MONGO_TIMEOUT)
     cliente.server_info()
     
     print('la conexión fue exitosa')
@@ -15,7 +14,7 @@ try:
     database = cliente[MONGODB]
     collection = database[MONGOCOL]
     
-    print(database['Registro_embarque'])
+
 
     def insertOneDocument(document):
         try:
