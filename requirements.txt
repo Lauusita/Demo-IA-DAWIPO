@@ -1,6 +1,4 @@
-
-
-Flask==3.0.0
+Flask>=2.0.0,<3.0.0
 langchain==0.0.329
 langchain-experimental==0.0.39
 openai==0.28.1
