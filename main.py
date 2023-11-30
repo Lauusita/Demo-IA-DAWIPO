@@ -6,13 +6,13 @@ from langchain.llms import OpenAI
 import json
 from langchain.embeddings import OpenAIEmbeddings
 from db import config
-
+import openai
 
 db = config
 
 
 def main():
-    OpenAI.api_key = os.getenv('OPENAI_API_KEY')
+    openai.api_key = os.getenv('OPENAI_API_KEY')
     
     st.header("Ask your CSV 📄")
     documents = st.file_uploader("Upload your file(s)", accept_multiple_files=True)
@@ -20,7 +20,7 @@ def main():
     selected = st.selectbox("Elige la manera en que quieres que responda: ",options=opciones)
     user_question = st.text_input("Ask a question about logistics: ")
 
-    embeddigns = OpenAIEmbeddings(openai_api_key=OpenAI.api_key)
+    # embeddigns = OpenAIEmbeddings(openai_api_key=OpenAI.api_key)
     
     if documents: 
         for file in documents:

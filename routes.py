@@ -1,11 +1,9 @@
 from flask import Flask, request
-from langchain.chat_models import ChatOpenAI
 import pymongo
 import openai
 from db import config
 
 db = config
-llm = ChatOpenAI(temperature=1, model="gpt-3.5-turbo")
 app = Flask(__name__) 
 
 @app.route("/search", methods=["POST"])
