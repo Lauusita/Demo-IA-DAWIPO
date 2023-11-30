@@ -67,13 +67,18 @@ def uploadFiles():
             excel_data_fragment = pd.read_excel(res, engine='openpyxl')
             json_string = excel_data_fragment.to_json(orient="index").lower()
             parsed_json = json.loads(json_string)
+            
+            complete_data = []
             for i in parsed_json:
-                try:
-                    data = parsed_json[f'{i}']
-                    db.insertOneDocument(data)
-                    return "Files successfully added to the database."
-                except:
-                    return "The data couldn't be added to the database."
+                data = parsed_json[f'{i}']
+                complete_data.append(data)
+                
+            try:
+                db.db.collection.insert_many(complete_data)
+                res = "All files successfully added to the database."
+                return res
+            except:
+                return "The data couldn't be added to the database."
         else:
             return jsonify(error="Unsupported file format")
     except Exception as e:
@@ -81,7 +86,5 @@ def uploadFiles():
     
     
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5000)
-
-    # {pedido: [ 4700088934, 4700083159, 4700085940] } Also, the user can make a question in english, you will have to translate
+# if __name__ == "__main__":
+#     app.run(host='0.0.0.0',port=5000)

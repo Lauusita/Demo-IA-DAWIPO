@@ -25,9 +25,9 @@ try:
         except pymongo.errors.ConnectionFailure as error:
             print('Error para añadir información ', error)
 
-    def insertManyDocuments(documents=[]):
+    def insertManyDocuments(documents):
         try:
-            db.registro_embarque.insert_many(documents)                
+            db.prueba.insert_many(documents)                
         except pymongo.errors.ConnectionFailure as error:
             print('Error para añadir información', error)
 
