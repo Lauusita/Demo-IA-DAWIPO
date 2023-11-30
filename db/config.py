@@ -20,16 +20,16 @@ try:
         try:
             db.collection.insert_one(document)
         except pymongo.errors.ConnectionFailure as error:
-            print('Error para añadir información '+ error)
+            print('Error para añadir información ', error)
 
     def insertManyDocuments(documents):
         try:
             db.collection.insert_many(documents)                
         except pymongo.errors.ConnectionFailure as error:
-            print('Error para añadir información' + error)
+            print('Error para añadir información', error)
 
     
 
         
 except pymongo.errors.ConnectionFailure as error:
-    print('Error conectar al servidor '+ error)
+    print('Error conectar al servidor ', error)

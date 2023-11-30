@@ -6,7 +6,7 @@ from db import config
 db = config
 app = Flask(__name__) 
 
-@app.route("/search", methods=["POST"])
+@app.route("/", methods=["POST"])
 def search():
 
     res = request.get_data()
