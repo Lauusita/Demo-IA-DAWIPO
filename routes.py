@@ -25,6 +25,8 @@ def searchJuan():
 
     loader_json_res = json.loads(res)
     
+    
+    
     prompt= loader_json_res.get('match', {}).get('resolvedInput', "")
     parameters = loader_json_res.get('match', {}).get('parameters', {})
 
@@ -48,6 +50,8 @@ def searchJuan():
         
                 result = db.db.collection.find(eval(string_mongo),{'_id': False})
                 list_result = list(result)
+                data = { "pedido": 4700091293}
+                data.keys()
 
     except pymongo.errors.ConnectionFailure as error:
         err = f'Please ensure that you are writing properly the information { error}'
@@ -58,8 +62,10 @@ def searchJuan():
 @app.route('/search', methods=['POST'])
 def searchLucho():
     res = request.get_data().decode('utf-8')
+    
 
     loader_json_res = json.loads(res)
+    o = loader_json_res.keys()
     
     string_returned_json = str(loader_json_res)
     
@@ -129,5 +135,9 @@ def handle_request():
     for key, value in data.items():
         print(f"{key}: {value}\n")
     return "si"
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5000)
+    app.run(host='0.0.0.0',port=8080)
+
+
