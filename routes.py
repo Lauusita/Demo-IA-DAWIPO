@@ -97,6 +97,7 @@ def searchLucho():
     except pymongo.errors.ConnectionFailure as error:
         err = f'Please ensure that you are writing properly the information { error}'
         return err
+    return "hola"
     return jsonify(list_result)
 
 
