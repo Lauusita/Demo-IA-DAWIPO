@@ -48,15 +48,11 @@ def searchJuan():
         
                 result = db.db.collection.find(eval(string_mongo),{'_id': False})
                 list_result = list(result)
-                json_list_result = json.dumps(list_result)
-                # json_list_result = jsonify(list_result)
-
-                full_response = {'messages': [{'text': json_list_result}]}
 
     except pymongo.errors.ConnectionFailure as error:
         err = f'Please ensure that you are writing properly the information { error}'
         return err
-    return full_response
+    return jsonify(list_result)
     
 
 @app.route('/search', methods=['POST'])
