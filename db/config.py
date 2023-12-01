@@ -15,6 +15,7 @@ try:
     database = cliente[MONGODB]
     collection = database[MONGOCOL]
     
+    db.collection.find()
     database2 = cliente[MONGODB]
     def insertOneDocument(document):
         try:
