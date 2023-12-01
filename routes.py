@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template 
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import pymongo
@@ -60,9 +60,9 @@ def searchJuan():
     
 
 @app.route('/search', methods=['POST'])
+
 def searchLucho():
 
-    # res = request.get_data().decode('utf-8')
     json = request.get_json()
     pedido = json.get('pedido')
     
@@ -72,8 +72,6 @@ def searchLucho():
     
     # if formatt == "JSON":
     #     return ""
-
-    string_returned_json = str(json)
     
     try:    
             # if (res==None or res==""):
@@ -91,14 +89,27 @@ def searchLucho():
             #     print(string_mongo)
         
         result = db.db.collection.find({'pedido': int(pedido)},{'_id': False})
-        # find({'pedido':})
-        list_result = list(result)
+        
+        list_result = list(result)[0]
+
+        
+        string_list = str(list_result)
+        
+
+        system_message = json.get('system_message')
+        llm = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": system_message}, {"role": "user", "content": string_list} ],
+            temperature= 0
+        )
+        
+        a = llm.choices[0].message.content
 
     except pymongo.errors.ConnectionFailure as error:
         err = f'Please ensure that you are writing properly the information { error}'
         return err
-    return "hola"
-    return jsonify(list_result)
+    
+    return a
 
 
 @app.route('/upload', methods=['POST'])
