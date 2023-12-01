@@ -15,8 +15,6 @@ try:
     database = cliente[MONGODB]
     collection = database[MONGOCOL]
     
-
-    print(db.list_collection_names())
     database2 = cliente[MONGODB]
     registro_embarque = database2['registro_embarque']
     def insertOneDocument(document):

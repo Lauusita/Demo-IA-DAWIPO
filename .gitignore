@@ -3,5 +3,5 @@
 /.env
 /backup.py
 /testing.py
-
-
+/backRoutes.py
+/p.txt
