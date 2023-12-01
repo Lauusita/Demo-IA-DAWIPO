@@ -16,7 +16,6 @@ try:
     collection = database[MONGOCOL]
     
     database2 = cliente[MONGODB]
-    registro_embarque = database2['registro_embarque']
     def insertOneDocument(document):
         try:
             db.collection.insert_one(document)
@@ -28,6 +27,7 @@ try:
             db.prueba.insert_many(documents)                
         except pymongo.errors.ConnectionFailure as error:
             print('Error para añadir información', error)
+
 
 except pymongo.errors.ConnectionFailure as error:
     print('Error conectar al servidor ', error)
