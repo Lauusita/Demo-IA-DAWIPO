@@ -27,7 +27,7 @@ def searchLucho():
         json_req = request.get_json()
         pedido = json_req.get('pedido')
 
-        result = db.db.prueba.find({'columna1': int(pedido)},{'_id': False})
+        result = db.db.prueba.find({'pedido': int(pedido)},{'_id': False})
         
         list_result = list(result)
         if len(list_result) == 0:
@@ -50,7 +50,53 @@ def searchLucho():
     
     return a
 
+@app.route('/split', methods=['POST'])
+def split():
+    try:
+        json_req = request.get_json()
+        pedido = json_req.get('pedido')
 
+        result = db.db.prueba.find({'pedido': int(pedido)},{'_id': False})
+        
+        list_result = list(result)
+        
+        datos = json_req.get('datos')
+        split_datos = datos.split(',')
+        
+        a = []
+        for i in split_datos:
+
+            item = i.strip()
+            for cantidadPos in range(len(list_result)):
+                new_results = f"{i}: {list_result[cantidadPos].get(item, 'No encontrado')}"
+                new_results.strip()
+                a.append(new_results)
+        print(a)
+        p = json.dumps(a)
+
+        # string_list = str(list_result)
+        # result_json = json.loads(string_list)
+        
+        # result_pedido = list_result
+        if len(list_result) == 0:
+            return "El pedido no existe."
+        
+        string_list = str(list_result)
+
+        system_message = json_req.get('system_message')
+        llm = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": system_message}, {"role": "user", "content": p} ],
+            temperature= 0
+        )
+            
+        a = llm.choices[0].message.content
+
+    except pymongo.errors.ConnectionFailure as error:
+        err = f'Please ensure that you are writing properly the information { error}'
+        return err
+
+    return a
 # ¡¡NO TOCAR!!
 # SUBIR ARCHIVOS A LA BASE DE DATOS (MONGODB)
 @app.route('/upload', methods=['POST'])
@@ -101,3 +147,6 @@ if __name__ == "__main__":
     app.run(host='0.0.0.0',port=8080)
 
 
+#string_data = str(result_data)
+        # string_data= string_data.strip('[]')
+        # result_data = json.loads(string_data)
