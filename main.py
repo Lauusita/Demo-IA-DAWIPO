@@ -1,67 +1,103 @@
-import os
-import streamlit as st
-import pandas as pd
-
-from langchain.llms import OpenAI
-import json
-from langchain.embeddings import OpenAIEmbeddings
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+from werkzeug.utils import secure_filename
 from db import config
+import pandas as pd
+import pymongo
 import openai
+import tempfile
+import json
+import os
+
 
 db = config
+app = Flask(__name__) 
+openai.api_key = os.getenv('OPENAI_API_KEY')
+CORS(app)
+@app.route('/')
+def index():
+    return render_template('index.html') 
 
 
-def main():
-    openai.api_key = os.getenv('OPENAI_API_KEY')
+# RUTA MAIN DE FLOWISE SIN IMPLEMENTAR CSV
+@app.route('/search', methods=['POST'])
+def searchLucho():
+
+    try:
+        json_req = request.get_json()
+        pedido = json_req.get('pedido')
+
+        result = db.db.prueba.find({'columna1': int(pedido)},{'_id': False})
+        
+        list_result = list(result)
+        if len(list_result) == 0:
+            return "El pedido no existe."
+        
+        string_list = str(list_result[0])
+
+        system_message = json_req.get('system_message')
+        llm = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": system_message}, {"role": "user", "content": string_list} ],
+            temperature= 0
+        )
+            
+        a = llm.choices[0].message.content
+
+    except pymongo.errors.ConnectionFailure as error:
+        err = f'Please ensure that you are writing properly the information { error}'
+        return err
     
-    st.header("Ask your CSV 📄")
-    documents = st.file_uploader("Upload your file(s)", accept_multiple_files=True)
-    opciones = ["Gerente logístico", "Asistente logístico"]
-    selected = st.selectbox("Elige la manera en que quieres que responda: ",options=opciones)
-    user_question = st.text_input("Ask a question about logistics: ")
+    return a
 
-    # embeddigns = OpenAIEmbeddings(openai_api_key=OpenAI.api_key)
+
+# ¡¡NO TOCAR!!
+# SUBIR ARCHIVOS A LA BASE DE DATOS (MONGODB)
+@app.route('/upload', methods=['POST'])
+def uploadFiles():
     
-    if documents: 
-        for file in documents:
-            documentName = str(file.name)
-            extension = os.path.splitext(documentName)
+    try:
+        if 'file' not in request.files:
+            return jsonify(error="No file provided")
+        
+        res = request.files['file']
+        
+        filename = secure_filename(res.filename)
+        unique_filename = os.path.splitext(filename)[1]
 
-            if extension[1] == '.csv':
-                csv_data_fragment = pd.read_excel(file)
-                json_string = csv_data_fragment.to_json(orient="index")
-                parsed_json= json.loads(json_string)
-                for i in parsed_json:
-                    try:
-                        data = parsed_json[f'{i}']
-                        prueba = parsed_json['15']
-                        db.insertOneDocument(data)
-                    except: print("p")
-
-            elif extension[1] in [".xlsx", ".xls"]:
+        if unique_filename == '.xlsx' or unique_filename == ".xls":
+            
+            excel_data_fragment = pd.read_excel(res, engine='openpyxl')
+            json_string = excel_data_fragment.to_json(orient="index").lower()
+            parsed_json = json.loads(json_string)
+            
+            complete_data = []
+            for i in parsed_json:
+                data = parsed_json[f'{i}']
+                complete_data.append(data)
                 
-                excel_data_fragment = pd.read_excel(file)
-                json_string = excel_data_fragment.to_json(orient="index").lower()
-                print(json_string)
-                parsed_json= json.loads(json_string)
-                for i in parsed_json:
-                    try:
-                        data = parsed_json[f'{i}']
-                        db.insertOneDocument(data)
-                
-                    except: print("p")
+            try:
+                db.db.collection.insert_many(complete_data)
+                res = "All files successfully added to the database."
+                return res
+            except:
+                return "The data couldn't be added to the database."
+        else:
+            return jsonify(error="Unsupported file format")
+    except Exception as e:
+        return jsonify(error=str(e))
     
-    if user_question is not None and user_question != "":
-            st.spinner("In progress")
-            if selected == "Gerente logístico" or selected == opciones[0]:
-                    user_question += "Indica la respuesta de manera gerencial, dando recomendacion de acuerdo a la pregunta realizada., si solicita información puntual de solo una orden de compra o número de embarque recomiéndale que elija la opción de Asistente logístico. La información enviada está en formato JSON, por lo que relaciona la información a través de las etiquetas JSON."
-            if selected == "Asistente logístico" or selected == opciones[1]:
-                    user_question += "Responder como Asistente de Logistica, indicar respuestas claras y completas, incluyendo todo detalle, si solicita información general que incluye la búsqueda de varias ordenes de compra recomiéndale que elija la opción de gerente. relaciona la información a través de la etiqueta JSON de números, es decir, en un solo diccionario está la información"
+    
+@app.route('/endpoint', methods=['POST'])
+def handle_request():
+    data = request.json
 
+    for key, value in data.items():
+        print(f"{key}: {value}\n")
+    return "si"
 
 
 if __name__ == "__main__":
-    main()
+    app.run(host='0.0.0.0',port=8080)
 
-# python -m streamlit run main.py
-#que información tienes acerca del pedido 4700088934
+
